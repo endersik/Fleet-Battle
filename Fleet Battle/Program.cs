@@ -15,31 +15,41 @@ namespace FleetBattle
     
     internal class Program
     {
-        public static void DrawMap(int column, int row, bool isHit){
-            char columnHeader = 'A';
-            int rowHeader = 1;
+        static int[,] Map = new int[10,10];
+        static int placed = 1;
+        static int hit = 2;
+        static int miss = 3;
 
-            for(int x=1; x<=10; x++){
-                if(x == 1){
+        public static void DrawMap(){
+            char columnHeader = 'A';
+
+            for(int x=0; x<10; x++){
+                if(x == 0){
                     Console.Write("  ");
                 }
                 Console.Write($" {columnHeader} ");
                 columnHeader++;
             }
             
-            for(int y=1; y<=10; y++){
-                Console.Write($"\n{rowHeader}");
-                if(y != 10){
+            for(int y=0; y<10; y++){
+                int row = y+1;
+                Console.Write($"\n{row}");
+                if(row != 10){
                     Console.Write(" ");
                 }
-                for(int z=1; z<=10;z++){
+                for(int z=0; z<10;z++){
                     Console.ForegroundColor= ConsoleColor.Blue;
-                    if(row == y && (column % 65) == z && isHit){
+                    if(Map[y,z] == placed){
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.Write(" x ");
+                        Console.ForegroundColor= ConsoleColor.Blue;
+                    }
+                    else if(Map[y,z] == hit){
                         Console.ForegroundColor = ConsoleColor.Red;
                         Console.Write(" x ");
                         Console.ForegroundColor= ConsoleColor.Blue;
                     }
-                    else if(row == y && (column % 65) == z && isHit){
+                    else if(Map[y,z] == miss){
                         Console.ForegroundColor = ConsoleColor.White;
                         Console.Write(" x ");
                         Console.ForegroundColor= ConsoleColor.Blue;
@@ -50,27 +60,122 @@ namespace FleetBattle
                     
                 }
                 Console.ForegroundColor= ConsoleColor.White;
-                rowHeader++;
             }
-        
+            Console.ReadLine();
+        }
+        public enum Ship{
+            Carrier = 5,
+            Battleship = 4,
+            Cruiser = 3,
+            Destroyer = 2
+        }
+
+        public static void PlaceShip(Ship ship){
+            DrawMap();
+            Point startPoint = GetInputPoint();
+            Point endPoint = GetInputPoint();
+            Console.Clear();
+            int shipLength;
+            switch(ship){
+                case Ship.Carrier:
+                    shipLength = (int) Ship.Carrier;
+                    if(startPoint.x == endPoint.x && ((Math.Abs(startPoint.y - endPoint.y)) + 1) == shipLength){
+                        PlaceVertically(startPoint, endPoint);                        
+                    }
+                    else if(startPoint.y == endPoint.y && ((Math.Abs(startPoint.x - endPoint.x)) + 1) == shipLength){
+                        PlaceHorizontally(startPoint,endPoint);
+                    }
+                    break;
+                case Ship.Battleship:
+                    shipLength = (int) Ship.Battleship;
+                    if(startPoint.x == endPoint.x && ((Math.Abs(startPoint.y - endPoint.y)) + 1) == shipLength){
+                        PlaceVertically(startPoint, endPoint);                        
+                    }
+                    else if(startPoint.y == endPoint.y && ((Math.Abs(startPoint.x - endPoint.x)) + 1) == shipLength){
+                        PlaceHorizontally(startPoint,endPoint);
+                    }
+                    break;
+                case Ship.Cruiser:
+                    shipLength = (int) Ship.Cruiser;
+                    if(startPoint.x == endPoint.x && ((Math.Abs(startPoint.y - endPoint.y)) + 1) == shipLength){
+                        PlaceVertically(startPoint, endPoint);                        
+                    }
+                    else if(startPoint.y == endPoint.y && ((Math.Abs(startPoint.x - endPoint.x)) + 1) == shipLength){
+                        PlaceHorizontally(startPoint,endPoint);
+                    }
+                    break;
+                case Ship.Destroyer:
+                    shipLength = (int) Ship.Destroyer;
+                    if(startPoint.x == endPoint.x && ((Math.Abs(startPoint.y - endPoint.y)) + 1) == shipLength){
+                        PlaceVertically(startPoint, endPoint);                        
+                    }
+                    else if(startPoint.y == endPoint.y && ((Math.Abs(startPoint.x - endPoint.x)) + 1) == shipLength){
+                        PlaceHorizontally(startPoint,endPoint);
+                    }
+                    break;
+            }
+        }
+    
+        public static void PlaceVertically(Point startPoint, Point endPoint){
+            if(startPoint.y < endPoint.y){
+                for(int y = startPoint.y; y<=endPoint.y; y++){
+                    int row = y;
+                    int col = startPoint.x;
+                    Map[row-1,col-1] = placed;
+                }
+            }
+            else{
+                for(int y = endPoint.y; y<=startPoint.y; y++){
+                    int row = y;
+                    int col = startPoint.x;
+                    Map[row-1,col-1] = placed;
+                }
+            }
+        }
+
+        public static void PlaceHorizontally(Point startPoint, Point endPoint){
+            if(startPoint.x < endPoint.x){
+                for(int x = startPoint.x; x<=endPoint.x; x++){
+                    int row = startPoint.y;
+                    int col = x;
+                    Map[row-1,col-1] = placed;
+                }
+            }
+            else{
+                for(int x = endPoint.x; x<=startPoint.x; x++){
+                    int row = startPoint.y;
+                    int col = x;
+                    Map[row-1,col-1] = placed;
+                }
+            }
+        }
+
+        public static void IsHit(int x, int y){
+
+        }
+
+        public static Point GetInputPoint(){
+            Point point = new Point();
+
+            Console.Write("\nEnter column header: ");
+            point.x =(Char.Parse(Console.ReadLine())) % 64;
+            Console.WriteLine(point.x);
+                
+            Console.Write("Enter row header: ");
+            point.y = Int32.Parse(Console.ReadLine());
+            Console.WriteLine(point.y);
+
+            return point;
         }
         static void Main(string[] args)
-        {   
-            while(true)
-            {
-                Console.Write("\nEnter column header: ");
-                int columnHeader =(Char.Parse(Console.ReadLine())) % 64;
-                Console.WriteLine(columnHeader);
-                
-                Console.Write("Enter row header: ");
-                int rowHeader = Int32.Parse(Console.ReadLine());
-                Console.WriteLine(rowHeader);
+        {  
+            PlaceShip(Ship.Carrier);
+            PlaceShip(Ship.Battleship);
+            PlaceShip(Ship.Cruiser);
+            PlaceShip(Ship.Destroyer);
 
-                Point shot = new Point(columnHeader, rowHeader);
-                bool isHit = true;
-
-                DrawMap(shot.x, shot.y, isHit);
-            }
+            DrawMap();
+            
         }    
             
     }
