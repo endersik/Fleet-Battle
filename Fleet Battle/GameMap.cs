@@ -24,11 +24,12 @@ namespace Fleet_Battle
     public class GameMap
     {
         private int[,] Map = new int[10,10];
-        private int placed = 1;
-        private int hit = 2;
-        private int miss = 3;
+        private static int placed = 1;
+        private static int hit = 2;
+        private static int miss = 3;
 
         public void DrawMap(bool showShips){
+            Console.Clear();
             char columnHeader = 'A';
 
             for(int x=0; x<10; x++){
@@ -46,7 +47,7 @@ namespace Fleet_Battle
                     Console.Write(" ");
                 }
                 for(int z=0; z<10;z++){
-                    Console.ForegroundColor= ConsoleColor.Blue;
+                    
                     if(showShips && Map[y,z] == placed){
                         UI.MarkShipWithGreen(" X ");
                     }
@@ -54,16 +55,14 @@ namespace Fleet_Battle
                         UI.MarkHitWithRed(" X ");
                     }
                     else if(Map[y,z] == miss){
-                        UI.MarkMissWithWhite(" X ");
-                    }
-                    else{
                         Console.Write(" X ");
                     }
-                    
+                    else{
+                        UI.MarkOceanWithBlue(" X ");
+                    }
                 }
-                Console.ForegroundColor= ConsoleColor.White;
             }
-            Console.ReadLine();
+            UI.PressEnterToContinue();
         }
     
 
@@ -136,6 +135,35 @@ namespace Fleet_Battle
                     Map[row-1,col-1] = placed;
                 }
             }
+        }
+
+        public void IsHit(Point shot){
+            int row = shot.y;
+            int col = shot.x;
+            if(this.Map[row-1,col-1] == 1){
+                this.Map[row-1,col-1] = hit;
+                UI.PrintRed("Hit!!");
+                UI.PressEnterToContinue();
+
+            }
+            else{
+                this.Map[row-1,col-1] = miss;
+                Console.WriteLine("Miss...");
+                UI.PressEnterToContinue();
+            }
+        }
+
+        public static bool WonGame(GameMap enemyMap){
+            int hitCount = 0;
+            for(int i = 0; i < 10; i++){
+                for(int j = 0; j < 10; j++){
+                    if(enemyMap.Map[i,j] == hit){
+                        hitCount++;
+                    } 
+                }
+            }
+            // return hitCount == 14 ? true : false;
+            return hitCount == 2 ? true : false;
         }
     }
 
