@@ -168,7 +168,8 @@ namespace Fleet_Battle
                 }
             }
             // Checks if hit count matches ship length (sunk)
-            return hitCount == 14 ? true : false;
+            // return hitCount == 14 ? true : false;
+            return hitCount == 9 ? true : false;
         }
     }
 

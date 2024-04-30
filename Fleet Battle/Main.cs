@@ -34,7 +34,7 @@ namespace FleetBattle
 
             //Initializes individual player maps with ship placement
             GameMap secondPlayerMap = new GameMap();
-            secondPlayerMap.GetShipCoordinate(ShipType.Carrier);
+            //secondPlayerMap.GetShipCoordinate(ShipType.Carrier);
             secondPlayerMap.GetShipCoordinate(ShipType.Battleship);
             secondPlayerMap.GetShipCoordinate(ShipType.Cruiser);
             secondPlayerMap.GetShipCoordinate(ShipType.Destroyer);
@@ -94,20 +94,22 @@ namespace FleetBattle
             Point point = new Point();
             
             Char tempCh; 
-            do{
-                Console.Write("\nx: ");
-                tempCh = Char.Parse(Console.ReadLine());
-                tempCh = Char.ToUpper(tempCh);
-                if(tempCh >= 'A' && tempCh <= 'J'){
-                    break;
+            int tempInt; 
+
+            try{
+                do{
+                    Console.Write("\nx: ");
+                    tempCh = Char.Parse(Console.ReadLine());
+                    tempCh = Char.ToUpper(tempCh);
+                    if(tempCh >= 'A' && tempCh <= 'J'){
+                        break;
                 }
-                UI.PrintRed("Enter a character from A to J");
-                UI.PressEnterToContinue();
-            } while(true);
-            point.x =(tempCh) % 64;
+                    UI.PrintRed("Enter a character from A to J");
+                    UI.PressEnterToContinue();
+                } while(true);
+                point.x =(tempCh) % 64;
             
-            int tempInt;    
-            do{
+                do{
                 Console.Write("y: ");
                 tempInt = Int32.Parse(Console.ReadLine());
                 if(tempInt > 0 && tempInt <= 10){
@@ -115,10 +117,13 @@ namespace FleetBattle
                 }
                 UI.PrintRed("Enter a number from 1 to 10");
                 UI.PressEnterToContinue();
-            }while(true);   
-            
-            point.y = tempInt;
+                }while(true);   
+                point.y = tempInt;
 
+            } catch(Exception e){
+                Console.WriteLine(e.Message);
+            }
+            
             return point;
         }
         public static Point GetPoint(ShipType ship){
