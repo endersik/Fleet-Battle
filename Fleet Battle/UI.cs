@@ -7,6 +7,27 @@ namespace Fleet_Battle
 {
     public class UI
     {
+        public static void Welcome(){
+            Console.Clear();
+            PrintDarkYellow("Ahoy, Captain! The seas churn for battle! Plot your course and deploy your fleet!");
+            PressEnterToContinue();
+        }
+        public static string GetPlayerName(){
+            Console.Write("Enter player name: ");
+            return Console.ReadLine();
+        }
+        public static void AnnounceBattleStarts(){
+            PrintDarkYellow("Brace yourself, Captain! The enemy fleet approaches! Time to unleash your naval fury!");
+            PressEnterToContinue();
+        }
+        public static void AnnounceWinner(string name){
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine($"\n{name} won the game!");
+            Console.ForegroundColor= ConsoleColor.White;
+        }
+
+
+
         public static void MarkOceanWithBlue(string text){
             Console.ForegroundColor = ConsoleColor.Blue;
             Console.Write(text);
@@ -22,6 +43,18 @@ namespace Fleet_Battle
             Console.Write(text);
             Console.ForegroundColor= ConsoleColor.White;
         }
+        public static void PrintRed(string text){
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.Write(text);
+            Console.ForegroundColor= ConsoleColor.White;
+        }
+        public static void PrintDarkYellow(string text){
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
+            Console.Write(text);
+            Console.ForegroundColor= ConsoleColor.White;
+        }
+
+
 
         public static void PrintDotAnimation(int timer = 10)
         {
@@ -32,32 +65,13 @@ namespace Fleet_Battle
             }
             Console.Clear();
         }
-
-        public static string GetUserName(){
-            Console.Write("Enter user name: ");
-            return Console.ReadLine();
-        }
-        public static void Welcome(string playerName){
-            Console.Clear();
-            Console.Write($"Welcome {playerName}! Let's place your ships...");
-            PressEnterToContinue();
-        }
-
         public static void PressEnterToContinue(){
             Console.WriteLine("\n\nPress enter to continue...");
             Console.ReadLine();
         }
 
-        public static void PrintRed(string text){
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.Write(text);
-            Console.ForegroundColor= ConsoleColor.White;
-        }
+        
 
-        public static void AnnounceWinner(string name){
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine($"{name} won the game!");
-            Console.ForegroundColor= ConsoleColor.White;
-        }
+        
     }
 }

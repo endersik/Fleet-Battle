@@ -15,7 +15,7 @@ namespace Fleet_Battle
             this.y = y;
         }
     }
-    public enum Ship{
+    public enum ShipType{
         Carrier = 5,
         Battleship = 4,
         Cruiser = 3,
@@ -62,33 +62,32 @@ namespace Fleet_Battle
                     }
                 }
             }
-            UI.PressEnterToContinue();
         }
     
 
         
-        public void GetShipCoordinate(Ship ship){
+        public void GetShipCoordinate(ShipType ship){
             bool showShips = true;
             DrawMap(showShips);
-            Point startPoint = Program.GetInputPoint();
-            Point endPoint = Program.GetInputPoint();
+            Point startPoint = Program.GetPoint(ship);
+            Point endPoint = Program.GetPoint(ship);
             Console.Clear();
             int shipLength;
             switch(ship){
-                case Ship.Carrier:
-                    shipLength = (int) Ship.Carrier;
+                case ShipType.Carrier:
+                    shipLength = (int) ShipType.Carrier;
                     PlaceShip(startPoint, endPoint, shipLength);
                     break;
-                case Ship.Battleship:
-                    shipLength = (int) Ship.Battleship;
+                case ShipType.Battleship:
+                    shipLength = (int) ShipType.Battleship;
                     PlaceShip(startPoint, endPoint, shipLength);
                     break;
-                case Ship.Cruiser:
-                    shipLength = (int) Ship.Cruiser;
+                case ShipType.Cruiser:
+                    shipLength = (int) ShipType.Cruiser;
                     PlaceShip(startPoint, endPoint, shipLength);
                     break;
-                case Ship.Destroyer:
-                    shipLength = (int) Ship.Destroyer;
+                case ShipType.Destroyer:
+                    shipLength = (int) ShipType.Destroyer;
                     PlaceShip(startPoint, endPoint, shipLength);
                     break;
             }
@@ -125,26 +124,32 @@ namespace Fleet_Battle
                 for(int x = startPoint.x; x<=endPoint.x; x++){
                     int row = startPoint.y;
                     int col = x;
-                    Map[row-1,col-1] = placed;
+                    Map[row-1,col-1] = placed; // Adjusts row, col for zero-based indexing
                 }
             }
             else{
                 for(int x = endPoint.x; x<=startPoint.x; x++){
                     int row = startPoint.y;
                     int col = x;
-                    Map[row-1,col-1] = placed;
+                    Map[row-1,col-1] = placed; 
                 }
             }
         }
 
+        // Marks hit/miss locations on the player map
         public void IsHit(Point shot){
             int row = shot.y;
             int col = shot.x;
-            if(this.Map[row-1,col-1] == 1){
+            // Adjusts row, col for zero-based indexing
+            if(this.Map[row-1,col-1] == placed){
                 this.Map[row-1,col-1] = hit;
                 UI.PrintRed("Hit!!");
                 UI.PressEnterToContinue();
 
+            }
+            else if(this.Map[row-1,col-1] == miss || this.Map[row-1,col-1] == hit){
+                UI.PrintRed("You have already targeted this area!");
+                UI.PressEnterToContinue();
             }
             else{
                 this.Map[row-1,col-1] = miss;
@@ -162,8 +167,8 @@ namespace Fleet_Battle
                     } 
                 }
             }
-            // return hitCount == 14 ? true : false;
-            return hitCount == 2 ? true : false;
+            // Checks if hit count matches ship length (sunk)
+            return hitCount == 14 ? true : false;
         }
     }
 
